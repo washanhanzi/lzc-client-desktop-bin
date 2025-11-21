@@ -1,0 +1,86 @@
+post_install() {
+  cat <<EOF
+
+==> lzc-client-desktop has been installed
+
+    To start the application, run:
+      lzc-client-desktop
+
+    Or launch from your application menu.
+
+EOF
+
+  # Update desktop database
+  if command -v update-desktop-database &> /dev/null; then
+    update-desktop-database -q usr/share/applications
+  fi
+
+  # Set chrome-sandbox permissions (required for Electron apps)
+  if [ -f /usr/lib/lzc-client-desktop/chrome-sandbox ]; then
+    echo "Setting chrome-sandbox permissions..."
+    if chmod 4755 /usr/lib/lzc-client-desktop/chrome-sandbox 2>/dev/null; then
+      echo "  ✓ chrome-sandbox permissions set successfully"
+    else
+      echo "  ✗ Failed to set chrome-sandbox permissions"
+      echo "    Please run: sudo chmod 4755 /usr/lib/lzc-client-desktop/chrome-sandbox"
+    fi
+  fi
+
+  # Set capabilities for network administration
+  echo "Setting CAP_NET_ADMIN capabilities..."
+
+  # Set capability on lzc-core (required for network operations)
+  if [ -f /usr/lib/lzc-client-desktop/core/lzc-core ]; then
+    if setcap cap_net_admin+ep /usr/lib/lzc-client-desktop/core/lzc-core 2>/dev/null; then
+      echo "  ✓ lzc-core capabilities set successfully"
+    else
+      echo "  ✗ Failed to set lzc-core capabilities"
+      echo "    Please run: sudo setcap cap_net_admin+ep /usr/lib/lzc-client-desktop/core/lzc-core"
+    fi
+  fi
+
+  # Set capability on main binary (may also be needed)
+  if [ -f /usr/lib/lzc-client-desktop/lzc-client-desktop ]; then
+    if setcap cap_net_admin+ep /usr/lib/lzc-client-desktop/lzc-client-desktop 2>/dev/null; then
+      echo "  ✓ lzc-client-desktop capabilities set successfully"
+    else
+      echo "  ✗ Failed to set lzc-client-desktop capabilities"
+      echo "    Please run: sudo setcap cap_net_admin+ep /usr/lib/lzc-client-desktop/lzc-client-desktop"
+    fi
+  fi
+
+  echo ""
+}
+
+post_upgrade() {
+  post_install
+}
+
+pre_remove() {
+  # Remove capabilities before uninstalling
+  if [ -f /usr/lib/lzc-client-desktop/core/lzc-core ]; then
+    setcap -r /usr/lib/lzc-client-desktop/core/lzc-core 2>/dev/null || true
+  fi
+  if [ -f /usr/lib/lzc-client-desktop/lzc-client-desktop ]; then
+    setcap -r /usr/lib/lzc-client-desktop/lzc-client-desktop 2>/dev/null || true
+  fi
+}
+
+post_remove() {
+  # Update desktop database
+  if command -v update-desktop-database &> /dev/null; then
+    update-desktop-database -q usr/share/applications
+  fi
+
+  cat <<EOF
+
+==> lzc-client-desktop has been removed
+
+    Configuration files may still exist in:
+      ~/.config/lzc-client-desktop
+      ~/.local/share/lzc-client-desktop
+
+    Remove them manually if desired.
+
+EOF
+}
