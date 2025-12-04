@@ -35,7 +35,7 @@ makedepends=('zstd')
 install="${pkgname}.install"
 source=("lzc-client-desktop_${pkgver}.tar.zst::https://dl.lazycat.cloud/client/desktop/stable/lzc-client-desktop_v${pkgver}.tar.zst"
         "image.png")
-sha256sums=('23ae44472ba72bc7a722b04995c781b3e1073f0324ab02e47cc4e4304904a2ac'
+sha256sums=('19e1fb1c5bd5757c2097c383669ebd78bb6687c93e7ed9e79a81256b641ff239'
             'cf462ea972a91a51d277d8bb8fd20647a10f8b9de2ac558b3a5cb3fc238711f4')
 
 # Disable compression for faster testing during development
