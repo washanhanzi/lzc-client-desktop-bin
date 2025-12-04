@@ -1,7 +1,7 @@
 pkgbase = lzc-client-desktop-bin
 	pkgdesc = 懒猫微服客户端 Lazy Cat microservice desktop client
 	pkgver = 1.6.2
-	pkgrel = 1
+	pkgrel = 2
 	url = https://lazycat.cloud/
 	install = lzc-client-desktop-bin.install
 	arch = x86_64

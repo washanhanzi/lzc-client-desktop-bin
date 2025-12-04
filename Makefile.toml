@@ -1,0 +1,35 @@
+[config]
+skip_core_tasks = true
+
+[tasks.build]
+description = "Generate checksums based on pkgver and regenerate .SRCINFO"
+script = '''
+#!/usr/bin/env bash
+set -e
+
+echo "Updating checksums..."
+updpkgsums
+
+echo "Regenerating .SRCINFO..."
+makepkg --printsrcinfo > .SRCINFO
+
+pkgver=$(grep "^pkgver=" PKGBUILD | cut -d'=' -f2)
+pkgrel=$(grep "^pkgrel=" PKGBUILD | cut -d'=' -f2)
+echo "Done! Package version: ${pkgver}-${pkgrel}"
+'''
+
+[tasks.clean]
+description = "Clean build artifacts"
+script = '''
+#!/usr/bin/env bash
+rm -rf src pkg *.pkg.tar* *.log
+echo "Cleaned build artifacts"
+'''
+
+[tasks.test-build]
+description = "Test build the package locally"
+script = '''
+#!/usr/bin/env bash
+set -e
+makepkg -sf
+'''
