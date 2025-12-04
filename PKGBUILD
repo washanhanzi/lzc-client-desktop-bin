@@ -1,7 +1,7 @@
 # Maintainer: Your Name <your.email@example.com>
 pkgname=lzc-client-desktop-bin
 pkgver=1.6.2
-pkgrel=1
+pkgrel=2
 pkgdesc='懒猫微服客户端 Lazy Cat microservice desktop client'
 arch=('x86_64')
 url='https://lazycat.cloud/'
