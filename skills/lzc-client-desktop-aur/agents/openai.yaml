@@ -1,0 +1,4 @@
+interface:
+  display_name: "LazyCat AUR Release"
+  short_description: "Update and release LazyCat AUR package"
+  default_prompt: "Use $lzc-client-desktop-aur to check the latest LazyCat desktop release, update the AUR packaging repo, rebuild it, and push the release."
