@@ -1,6 +1,6 @@
 pkgbase = lzc-client-desktop-bin
 	pkgdesc = 懒猫微服客户端 Lazy Cat microservice desktop client
-	pkgver = 1.6.7
+	pkgver = 1.6.8
 	pkgrel = 1
 	url = https://lazycat.cloud/
 	install = lzc-client-desktop-bin.install
@@ -30,9 +30,9 @@ pkgbase = lzc-client-desktop-bin
 	depends = libxkbcommon
 	depends = systemd-libs
 	depends = alsa-lib
-	source = lzc-client-desktop_1.6.7.tar.zst::https://dl.lazycat.cloud/client/desktop/stable/lzc-client-desktop_v1.6.7.tar.zst
+	source = lzc-client-desktop_1.6.8.tar.zst::https://dl.lazycat.cloud/client/desktop/stable/lzc-client-desktop_v1.6.8.tar.zst
 	source = image.png
-	sha256sums = ed03df8c97e7cc0ead356acae3b389060debfcb695f42712c428c8af7ddc9419
+	sha256sums = d0a9f38b134d32336fc22cd2a2b809b6c43de8ceee3ef10300e547686239cee5
 	sha256sums = cf462ea972a91a51d277d8bb8fd20647a10f8b9de2ac558b3a5cb3fc238711f4
 
 pkgname = lzc-client-desktop-bin
