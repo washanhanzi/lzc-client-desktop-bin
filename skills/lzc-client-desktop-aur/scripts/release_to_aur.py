@@ -16,6 +16,7 @@ METADATA_URL = "https://dl.lazycat.cloud/client/desktop/lzc-client-desktop.tar.z
 INSTALL_SCRIPT_URL = "https://dl.lazycat.cloud/client/desktop/linux-install"
 TARBALL_URL_TEMPLATE = "https://dl.lazycat.cloud/client/desktop/stable/lzc-client-desktop_v{version}.tar.zst"
 AUR_REMOTE_SUFFIX = "aur.archlinux.org/lzc-client-desktop-bin.git"
+AUR_REMOTE_BRANCH = "master"
 
 
 def run(cmd: list[str], *, cwd: Path | None = None, capture: bool = False) -> str:
@@ -152,6 +153,32 @@ def ensure_aur_remote(repo: Path) -> None:
         raise RuntimeError(f"origin does not look like the AUR remote: {remote_url}")
 
 
+def ensure_aur_pushable_history(repo: Path) -> None:
+    run(["git", "fetch", "origin", AUR_REMOTE_BRANCH], cwd=repo)
+    objects = run(
+        ["git", "rev-list", "--objects", f"origin/{AUR_REMOTE_BRANCH}..HEAD"],
+        cwd=repo,
+        capture=True,
+    )
+    subdir_paths = sorted(
+        {
+            line.split(" ", 1)[1]
+            for line in objects.splitlines()
+            if " " in line and "/" in line.split(" ", 1)[1]
+        }
+    )
+    if subdir_paths:
+        preview = ", ".join(subdir_paths[:5])
+        if len(subdir_paths) > 5:
+            preview = f"{preview}, ..."
+        raise RuntimeError(
+            "AUR rejects package repositories with subdirectories in pushed history. "
+            "Use the persistent clean AUR worktree, usually "
+            "../lzc-client-desktop-bin-aur on branch aur. "
+            f"Rejected path examples: {preview}"
+        )
+
+
 def maybe_commit(repo: Path, version: str, pkgrel: str) -> None:
     diff = run(["git", "status", "--short", "--", "PKGBUILD", ".SRCINFO"], cwd=repo, capture=True)
     if not diff:
@@ -164,7 +191,8 @@ def maybe_commit(repo: Path, version: str, pkgrel: str) -> None:
 
 def push_release(repo: Path) -> None:
     ensure_aur_remote(repo)
-    run(["git", "push", "origin", "HEAD"], cwd=repo)
+    ensure_aur_pushable_history(repo)
+    run(["git", "push", "origin", f"HEAD:{AUR_REMOTE_BRANCH}"], cwd=repo)
 
 
 def print_summary(current_version: str, target_version: str, payload: dict) -> None:
