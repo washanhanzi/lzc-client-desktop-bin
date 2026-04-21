@@ -1,6 +1,6 @@
 # Maintainer: Your Name <your.email@example.com>
 pkgname=lzc-client-desktop-bin
-pkgver=1.6.8
+pkgver=1.6.20
 pkgrel=1
 pkgdesc='懒猫微服客户端 Lazy Cat microservice desktop client'
 arch=('x86_64')
@@ -35,7 +35,7 @@ makedepends=('zstd')
 install="${pkgname}.install"
 source=("lzc-client-desktop_${pkgver}.tar.zst::https://dl.lazycat.cloud/client/desktop/stable/lzc-client-desktop_v${pkgver}.tar.zst"
         "image.png")
-sha256sums=('d0a9f38b134d32336fc22cd2a2b809b6c43de8ceee3ef10300e547686239cee5'
+sha256sums=('398c4716349f448a3970b86300dc1bae83afbaf97cfc9390e784322829304cd7'
             'cf462ea972a91a51d277d8bb8fd20647a10f8b9de2ac558b3a5cb3fc238711f4')
 
 # Disable compression for faster testing during development
